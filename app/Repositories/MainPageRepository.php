@@ -27,7 +27,7 @@ class MainPageRepository {
         $weatherArr['humidity_percentage'] = $data->main->humidity;                                 //Влажность в процентах
 
         foreach ($data->weather as $state){
-            $weatherArr['state_desc'] = $state->description;                                        //Что происходит на улице: снег, дожль и т.д.
+            $weatherArr['state_desc'] = $state->description;                                        //Что происходит на улице: снег, дождь и т.д.
             break;
         }
 

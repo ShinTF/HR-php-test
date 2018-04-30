@@ -2,21 +2,48 @@
 
 use App\Order;
 
+use Mail;
+
 class OrderRepository {
 
-    public function getOrdersWithRelations()
-    {
-        return Order::with('partner')
-            ->with(['order_products' => function($query){
-                $query->with('product');
-            }])
-            ->get();
+    public function getOrdersByStatuses($statuses){
+
+        $data = array();
+
+        foreach ($statuses as $status){
+            switch($status){
+                case 'expired':
+
+                    $orders = Order::OrdersWithRelations()->expired()->get();
+                    $data['expired'] = $this->makeOrdersDataArray($orders);
+
+                    break;
+                case 'current':
+
+                    $orders = Order::OrdersWithRelations()->current()->get();
+                    $data['current'] = $this->makeOrdersDataArray($orders);
+
+                    break;
+                case 'new':
+
+                    $orders = Order::OrdersWithRelations()->new()->get();
+                    $data['new'] = $this->makeOrdersDataArray($orders);
+
+                    break;
+
+                case 'completed':
+                    $orders = Order::OrdersWithRelations()->completed()->get();
+                    $data['completed'] = $this->makeOrdersDataArray($orders);
+
+                    break;
+            }
+        }
+
+        return $data;
     }
 
-    public function makeOrdersDataArray()
+    public function makeOrdersDataArray($orders)
     {
-        $orders = $this->getOrdersWithRelations();
-
         $output = array();
         $i = 0;
         foreach ($orders as $order){
@@ -59,4 +86,28 @@ class OrderRepository {
 
         return $productsList;
     }
+
+    public function sendMailToParnerAndVendors(Order $order)
+    {
+        $mails = array();
+        $products = $order->order_products;
+
+        foreach ($products as $product){
+            $mails[] = $product->product->vendor->email;
+        }
+
+        $mails[] = $order->partner->email;
+
+        $dataForMail = array();
+        $dataForMail['id'] = $order->id;
+        $dataForMail['product_list'] = $this->getProductsList($order);
+        $dataForMail['total_sum'] = $order->getProductsTotal();
+
+        foreach ($mails as $mail){
+            Mail::send('emails.orders.status_confirmed', ['data' => $dataForMail], function ($message) use ($mail) {
+                $message->to($mail)->subject('Завершен заказ');
+            });
+        }
+    }
+
 }

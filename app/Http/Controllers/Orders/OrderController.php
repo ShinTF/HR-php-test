@@ -21,8 +21,10 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = $this->ordersRepository->makeOrdersDataArray();
+        $orderSatuses = ['expired', 'current', 'new', 'completed'];
 
+        $orders = $this->ordersRepository->getOrdersByStatuses($orderSatuses);
+//        dd($orders);
         return view('orders.index')->with('orders', $orders);
     }
 
@@ -47,6 +49,10 @@ class OrderController extends Controller
         $order->status = $data['order_status'];
 
         if($order->save() && $order->partner->save()) {
+//            dd($order);
+            if($order->status == Order::COMPLETED_ORDER){
+                $this->ordersRepository->sendMailToParnerAndVendors($order);
+            }
 
             return redirect()->action('Orders\OrderController@index');
         }

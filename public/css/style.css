@@ -3,15 +3,12 @@
 .main-page-container{
     margin-top: 50px;
 }
-
 .item-title{
     text-align: right;
 }
-
 .weather__item{
     padding: 5px;
 }
-
 .links{
     padding: 5px;
     font-size: 18px;
@@ -22,16 +19,23 @@
 table {
     margin-top: 25px;
 }
-
 .header-wrap, .header-wrap td{
     border: 3px solid black;
     font-size: 16px;
 }
-
 td{
     padding: 5px;
     text-align: center;
     border: 1px solid #b4b1a1;
+}
+.nav-orders{
+    margin-top: 50px;
+}
+.orders{
+    text-align: center;
+}
+.nothing-found{
+    margin-top: 25px;
 }
 
 /*Страница редактирования заказа*/
@@ -42,32 +46,33 @@ td{
     padding-top: 20px;
     padding-bottom: 10px;
 }
-
 .btn-row{
     text-align: center;
 }
+.tab-pane table{
+    width: 100%;
+}
+
 /*Страница "Продукты"*/
 
 #products-table{
     width: 100%;
 }
-
 .price{
     cursor: pointer;
 }
-
 .pagination-block{
     text-align: center;
 }
 
 /*Стили модального окна*/
+
 .modal-dialog{
     width: 40%;
 }
 .modal-footer{
     text-align: center;
 }
-
 .new-price{
     width: 100%;
 }
