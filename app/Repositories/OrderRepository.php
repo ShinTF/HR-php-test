@@ -104,9 +104,13 @@ class OrderRepository {
         $dataForMail['total_sum'] = $order->getProductsTotal();
 
         foreach ($mails as $mail){
-            Mail::send('emails.orders.status_confirmed', ['data' => $dataForMail], function ($message) use ($mail) {
-                $message->to($mail)->subject('Завершен заказ');
-            });
+            try {
+                Mail::send('emails.orders.status_confirmed', ['data' => $dataForMail], function ($message) use ($mail) {
+                    $message->to($mail)->subject('Завершен заказ');
+                });
+            }catch(\Exception $e) {
+                continue;
+            }
         }
     }
 

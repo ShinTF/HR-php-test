@@ -39,7 +39,7 @@
         </style>
     </head>
     <body>
-        <table cellpadding="0" cellspacing="0" border="0" style="margin:20px 0; padding:0; width:100%;">
+        <table cellpadding="0" cellspacing="0" border="0" style="margin:20px 0; padding:0;">
             <tr>
                <td class="header">
                     Заказ {{$data['id']}} завершен
